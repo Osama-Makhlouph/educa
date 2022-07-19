@@ -112,7 +112,7 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
             obj.save()
             if not id:
                 # new content
-                Content.objects.create(module=self.module, item=obj)
+                created = Content.objects.create(module=self.module, item=obj)
             return redirect('module_content_list', self.module.id)
         return self.render_to_response({'form': form, 'object': self.obj})
 
@@ -125,3 +125,12 @@ class ContentDeleteView(View):
         content.item.delete()
         content.delete()
         return redirect('module_content_list', module.id)
+
+
+class ModuleContentListView(TemplateResponseMixin, View):
+    template_name = 'courses/manage/module/content_list.html'
+
+    def get(self, request, module_id):
+        module = get_object_or_404(
+            Module, id=module_id, course__owner=request.user)
+        return self.render_to_response({'module': module})
