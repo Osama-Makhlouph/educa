@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'memcache_status',
     'rest_framework',
     'chat',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +59,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'src.urls'
+ASGI_APPLICATION = 'src.routing.application'
 
 TEMPLATES = [
     {
@@ -148,4 +150,13 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
+}
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)],
+        },
+    },
 }
